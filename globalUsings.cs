@@ -1,0 +1,12 @@
+global using System;
+global using System.Text;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
+global using System.Collections.Generic;
+global using System.Linq;
+global using RabbitMQ.Client;
+global using RabbitMQ.Client.Events;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.DependencyInjection;
+global using DotNetBB.EventBus.Abstraction;
+global using DotNetBB.EventBus.Common;
