@@ -83,7 +83,7 @@ public class SubscriptionManager: ISubscriptionManager
 
     public List<SubscriptionInfo> GetSubscriptions(string eventName)
     {
-         return _subscriptions.ContainsKey(eventName) ? _subscriptions[eventName]: new List<SubscriptionInfo>();
+         return _subscriptions.ContainsKey(eventName) ? _subscriptions[eventName] : null;
     }
 
     public SubscriptionInfo? GetSubscription<TEvent, THandler>()

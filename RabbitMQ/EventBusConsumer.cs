@@ -81,7 +81,7 @@ public class EventBusConsumer : IEventBusConsumer
     {
         var channel = Connection.CreateModel();
 
-        var consumer = new AsyncEventingBasicConsumer(channel);
+        var consumer = new EventingBasicConsumer(channel);
         consumer.Received += MessageReceived;
         channel.BasicConsume(queue: queueName,
                      autoAck: true,
@@ -90,14 +90,14 @@ public class EventBusConsumer : IEventBusConsumer
         return channel;
     }
 
-    private async Task MessageReceived(object? sender, BasicDeliverEventArgs e)
+    private async void MessageReceived(object? sender, BasicDeliverEventArgs e)
     {
         var body = e.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);
         Console.WriteLine($" [x] Received {message}");
 
         var eventName = e.RoutingKey;
-        if(string.IsNullOrWhiteSpace(eventName)) throw new ArgumentNullException("eventName");
+        if(string.IsNullOrWhiteSpace(eventName)) throw new Exception("eventName is null");
         if(!_subscriptionManager.HasSubscriptions(eventName)) 
         {
             Console.WriteLine($"No subscription found for event {eventName}");
@@ -113,9 +113,9 @@ public class EventBusConsumer : IEventBusConsumer
                 await ProcessMessage(message, subscription);
                 allFailed = false;
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Message processing failed for event:{eventName}, handler:{subscription.HandlerType?.ToString()}, message:{message}");
+                Console.WriteLine($"Message processing failed for event:{eventName}, handler:{subscription.HandlerType?.ToString()}, message:{message}, error:{ex.Message}");
             }
         }
     }
